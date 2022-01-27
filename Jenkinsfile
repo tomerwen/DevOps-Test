@@ -22,7 +22,6 @@ pipeline {
       }
     }
     stage("deploy"){
-      steps{
         input{
           message "Select the env to deploy to"
           ok "Done"
@@ -30,6 +29,7 @@ pipeline {
            choice(name: 'ENV' , choices: ['dev', 'STG', 'prod'] , description: '')
           }
         }
+      steps{
         echo 'deploying the application'
         echo "deploying to ${ENV}"
       }
