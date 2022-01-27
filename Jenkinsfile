@@ -23,8 +23,15 @@ pipeline {
     }
     stage("deploy"){
       steps{
+        input{
+          message "Select the env to deploy to"
+          ok "Done"
+          parameters{
+           choice(name: 'ENV' , choices: ['dev', 'STG', 'prod'] , description: '')
+          }
+        }
         echo 'deploying the application'
-        echo "deploying version ${params.VERSION}"
+        echo "deploying to ${ENV}"
       }
     }
   }
