@@ -1,9 +1,13 @@
 pipeline {
   agent any
+  tools {
+    maven 'maven-3.6'
+  }
   stages {
-    stage("build"){
+    stage("build jar"){
       steps{
         echo 'building the application'
+        sh 'mvn package'
       }
     }
     stage("build an image"){
