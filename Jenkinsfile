@@ -1,41 +1,23 @@
 pipeline {
   agent any
-  parameters{
-    string(name: 'VERSION', defaultValue:'', description:'version to deploy on prod')
-    choice(name: 'VERSION' , choices: ['1.1.0', '1.2.0', '1.3.0'] , description: '')
-    booleanParam(name: 'executeTests', defaultValue : true, description: '')
-  }
   stages {
     stage("build"){
       steps{
         echo 'building the application'
       }
     }
-    stage("tests"){
-      when{
-        expression{
-          params.executeTests
-        }
-      }
+    stage("build an image"){
       steps{
-        echo 'testing the application'
+        echo ('building Docker image')
+        withCredentials([usernamePassword(credentialsId: 'jaanuk-docker', passwordVariable: 'PASS', usernameVariable: 'USER')])
+        sh "docker build -t jaanuk/devops:Test-1.0 ."
+        sh "echo PASS | docker login -u $USER --password-stdin "
+        sh "docker push jaanuk/devops:Test-1.0"
       }
     }
-    stage("deploy"){
-        input{
-          message "Select the env to deploy to"
-          ok "Done"
-          parameters{
-           choice(name: 'ENV' , choices: ['dev', 'STG', 'prod'] , description: '')
-          }
-        }
+    stage("tests"){
       steps{
-        echo 'deploying the application'
-<<<<<<< HEAD
-        echo "deploying version ${VERSION}"
-=======
-        echo "deploying to ${ENV}"
->>>>>>> aab6ee9af8a78d255d0ba190aafd1338f9cb5a68
+        echo 'testing the application'
       }
     }
   }
