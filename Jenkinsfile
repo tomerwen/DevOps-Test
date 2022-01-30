@@ -4,6 +4,9 @@ pipeline {
     maven 'maven'
   }
   stages {
+    stage("check){
+          sh "mvn --version"
+          }
     stage("build jar"){
       steps{
         script{
