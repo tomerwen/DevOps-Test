@@ -5,8 +5,12 @@ pipeline {
   }
   stages {
     stage("check"){
+      steps{
+        script{
           sh "mvn --version"
+            }
           }
+    }
     stage("build jar"){
       steps{
         script{
