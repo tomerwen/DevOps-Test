@@ -21,11 +21,11 @@ pipeline {
     }
     stage("build an image"){
       steps{
-        echo ('building Docker image')
         withCredentials([usernamePassword(credentialsId: 'jaanuk-docker', passwordVariable: 'PASS', usernameVariable: 'USER')])
         sh "docker build -t jaanuk/devops:Test-1.0 ."
         sh "echo PASS | docker login -u $USER --password-stdin "
         sh "docker push jaanuk/devops:Test-1.0"
+        echo ('building Docker image')
       }
     }
     stage("tests"){
